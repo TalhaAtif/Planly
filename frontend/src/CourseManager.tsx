@@ -2,11 +2,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+interface Task {
+  task: string;
+  done: boolean;
+}
+
+interface Course {
+  id: string;
+  title: string;
+  tasks: Task[];
+}
+
 function CourseManager() {
-  const [title, setTitle] = useState("");
-  const [taskInputs, setTaskInputs] = useState({});
-  const [courses, setCourses] = useState([]);
-  const [message, setMessage] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [taskInputs, setTaskInputs] = useState<{ [key: string]: string }>({});
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [message, setMessage] = useState<string>("");
 
   // Fetch courses from backend
   const fetchCourses = async () => {
@@ -18,7 +29,7 @@ function CourseManager() {
     }
   };
 
-  const addTask = async (e, courseId) => {
+  const addTask = async (e: React.FormEvent, courseId: string) => {
     e.preventDefault();
     const task = taskInputs[courseId];
     if (!task) return;
@@ -37,7 +48,7 @@ function CourseManager() {
   }, []);
 
   // Add new course
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await axios.post("/api/courses", { title });
